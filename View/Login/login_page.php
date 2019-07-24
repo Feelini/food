@@ -1,6 +1,6 @@
 <div class="loginContent">
     <div class="loginWrap">
-        <form action="<?= BASE_URL;?>/index.php?controller=login&action=enter" class="loginForm" method="post">
+        <form action="<?= BASE_URL;?>/login/enter" class="loginForm" method="post">
             <input type="text"
                    class="input large_input<?php echo (isset($errors['login']) && $errors['login'] !== '') ? ' red' : ''?>"
                    name="login"

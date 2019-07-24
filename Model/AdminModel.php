@@ -10,9 +10,9 @@ class AdminModel extends Model{
         parent::__construct($action);
     }
 
-    public function indexAction(){
+    public function indexAction($data){
         $this->title = 'Редактор рецептов';
-        $page = $_GET['page'] ?? 1;
+        $page = $data['page'] ?? 1;
         $dish_count = $this->get_dish_count();
         $this->data['pages_count'] = ceil(((int)$dish_count[0]/$this->items_per_page));
         $this->data['current_page'] = $page;
@@ -28,7 +28,7 @@ class AdminModel extends Model{
             $save_img_path = $_SERVER['DOCUMENT_ROOT'] . '/img/dish_img/' . $_FILES['dish_img']['name'];
             move_uploaded_file($_FILES['dish_img']['tmp_name'], $save_img_path);
             $this->add_dish($new_dish['name'], $new_dish['category_id'], $img_path, $new_dish['recipe']);
-            $dish_id = mysqli_insert_id($this->mysqli);
+            $dish_id = $this->mysqli->insert_id;
             $ingr_count = count($new_dish['products']);
             for ($i = 0; $i < $ingr_count; $i++) {
                 $this->add_ingredients($new_dish['products'][$i], $dish_id, $new_dish['unit_number'][$i], $new_dish['units'][$i]);
@@ -40,17 +40,16 @@ class AdminModel extends Model{
         $this->data['products'] = $this->get_products_content();
     }
 
-    public function deleteDishAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
-            $this->deleteDish($id);
+    public function deleteDishAction($data){
+        if (isset($data['id']) && $data['id'] !== '') {
+            $this->deleteDish($data['id']);
         }
     }
 
-    public function editDishAction(){
+    public function editDishAction($data){
         $this->title = 'Редактировать блюдо';
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
+        if (isset($data['id']) && $data['id'] !== '') {
+            $id = $data['id'];
             $this->data['dish'] = $this->get_dish_content(['id' => $id]);
             $this->data['units'] = $this->get_units_content();
             $this->data['categories'] = $this->get_categories_content();
@@ -75,8 +74,8 @@ class AdminModel extends Model{
         }
     }
 
-    public function ingredientsAction(){
-        $page = $_GET['page'] ?? 1;
+    public function ingredientsAction($data){
+        $page = $data['page'] ?? 1;
         $ingredient_count = $this->get_products_count();
         $this->data['pages_count'] = ceil(((int)$ingredient_count[0]/$this->items_per_page));
         $this->data['current_page'] = $page;
@@ -89,16 +88,15 @@ class AdminModel extends Model{
         $this->data['products'] = $this->get_products_content(['page' => $page]);
     }
 
-    public function deleteIngredientsAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
-            $this->deleteIngredient($id);
+    public function deleteIngredientsAction($data){
+        if (isset($data['id']) && $data['id'] !== '') {
+            $this->deleteIngredient($data['id']);
         }
     }
 
-    public function editIngredientAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
+    public function editIngredientAction($data){
+        if (isset($data['id']) && $data['id'] !== '') {
+            $id = $data['id'];
             $this->data['product'] = $this->get_products_content(['id' => $id]);
         } elseif (isset($_POST['name']) && $_POST['name'] !== '') {
             $name = $_POST['name'];
@@ -107,9 +105,9 @@ class AdminModel extends Model{
         }
     }
 
-    public function categoriesAction(){
+    public function categoriesAction($data){
         $this->title = 'Редактор категорий';
-        $page = $_GET['page'] ?? 1;
+        $page = $data['page'] ?? 1;
         $categories_count = $this->get_categories_count();
         $this->data['pages_count'] = ceil(((int)$categories_count[0]/$this->items_per_page));
         $this->data['current_page'] = $page;
@@ -121,16 +119,15 @@ class AdminModel extends Model{
         $this->data['categories'] = $this->get_categories_content(['page' => $page]);
     }
 
-    public function deleteCategoryAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
-            $this->deleteCategory($id);
+    public function deleteCategoryAction($data){
+        if (isset($data['id']) && $data['id'] !== '') {
+            $this->deleteCategory($data['id']);
         }
     }
 
-    public function editCategoryAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
+    public function editCategoryAction($data){
+        if (isset($data['id']) && $data['id'] !== '') {
+            $id = $data['id'];
             $this->data['category'] = $this->get_categories_content(['id' => $id]);
         } elseif (isset($_POST['name']) && $_POST['name'] !== '') {
             $name = $_POST['name'];
@@ -139,9 +136,9 @@ class AdminModel extends Model{
         }
     }
 
-    public function unitsAction(){
+    public function unitsAction($data){
         $this->title = 'Редактор мер';
-        $page = $_GET['page'] ?? 1;
+        $page = $data['page'] ?? 1;
         $categories_count = $this->get_units_count();
         $this->data['pages_count'] = ceil(((int)$categories_count[0]/$this->items_per_page));
         $this->data['current_page'] = $page;
@@ -153,16 +150,15 @@ class AdminModel extends Model{
         $this->data['units'] = $this->get_units_content(['page' => $page]);
     }
 
-    public function deleteUnitAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
-            $this->deleteUnit($id);
+    public function deleteUnitAction($data){
+        if (isset($data['id']) && $data['id'] !== '') {
+            $this->deleteUnit($data['id']);
         }
     }
 
-    public function editUnitAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== '') {
-            $id = $_GET['id'];
+    public function editUnitAction($data){
+        if (isset($data['id']) && $data['id'] !== '') {
+            $id = $data['id'];
             $this->data['unit'] = $this->get_units_content(['id' => $id]);
         } elseif (isset($_POST['name']) && $_POST['name'] !== '') {
             $name = $_POST['name'];

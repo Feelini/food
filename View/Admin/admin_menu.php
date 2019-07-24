@@ -7,19 +7,19 @@
             </span>
             <div id="slide" class="subButtons">
                 <span class="adminSidebar_subButton">
-                    <a href="<?= BASE_URL; ?>/index.php?controller=admin"
+                    <a href="<?= BASE_URL; ?>/admin"
                        class="adminSidebar_subLink">Редактор рецептов</a>
                 </span>
                 <span class="adminSidebar_subButton">
-                    <a href="<?= BASE_URL; ?>/index.php?controller=admin&action=ingredients"
+                    <a href="<?= BASE_URL; ?>/admin/ingredients"
                        class="adminSidebar_subLink">Редактор ингридиентов</a>
                 </span>
                 <span class="adminSidebar_subButton">
-                    <a href="<?= BASE_URL; ?>/index.php?controller=admin&action=categories"
+                    <a href="<?= BASE_URL; ?>/admin/categories"
                        class="adminSidebar_subLink">Редактор категорий</a>
                 </span>
                 <span class="adminSidebar_subButton">
-                    <a href="<?= BASE_URL; ?>/index.php?controller=admin&action=units"
+                    <a href="<?= BASE_URL; ?>/admin/units"
                        class="adminSidebar_subLink">Редактор мер</a>
                 </span>
             </div>

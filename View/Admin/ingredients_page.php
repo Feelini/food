@@ -1,7 +1,7 @@
 <div class="mainContent">
     <div class="addItem">
         <div class="message"><? ?></div>
-        <form class="addClass" action="<?= BASE_URL; ?>/index.php?controller=admin&action=ingredients" method="post">
+        <form class="addClass" action="<?= BASE_URL; ?>/admin/ingredients" method="post">
             <input class="input" type="text" name="name" autocomplete="off" placeholder="Название">
             <input class="inputBtn mFont" type="submit" value="Добавить">
         </form>
@@ -25,7 +25,7 @@
                     <td><?= $products[$i]['product_name']; ?></td>
                     <td>
                         <a class="adminLink"
-                           href="<?= BASE_URL; ?>/index.php?controller=admin&action=editIngredient&id=<?= $products[$i]['id_product']; ?>">
+                           href="<?= BASE_URL; ?>/admin/editIngredient/<?= $products[$i]['id_product']; ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                  viewBox="0 0 26 26" version="1.1"
                                  width="26px" height="26px">
@@ -36,7 +36,7 @@
                             </svg>
                         </a>
                         <a class="adminLink deleteButton"
-                           href="<?= BASE_URL; ?>/index.php?controller=admin&action=deleteIngredients&id=<?= $products[$i]['id_product']; ?>">
+                           href="<?= BASE_URL; ?>/admin/deleteIngredients/<?= $products[$i]['id_product']; ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                  viewBox="0 0 26 26" version="1.1"
                                  width="26px" height="26px">
@@ -57,12 +57,12 @@
         <span class="pagination_link disable">Пред</span>
         <?php else:?>
         <a class="pagination_link"
-           href="<?= BASE_URL;?>/index.php?controller=admin&action=ingredients&page=<?= $current_page - 1;?>">Пред
+           href="<?= BASE_URL;?>/admin/ingredients/<?= $current_page - 1;?>">Пред
         </a>
         <?php endif;?>
         <?php for ($i = 0; $i < $pages_count; $i++):?>
             <a class="pagination_link <?php if (($i + 1) == $current_page) echo 'active'?>"
-               href="<?= BASE_URL;?>/index.php?controller=admin&action=ingredients&page=<?= ($i + 1);?>">
+               href="<?= BASE_URL;?>/admin/ingredients/<?= ($i + 1);?>">
                 <?= ($i + 1);?>
             </a>
         <?php endfor;?>
@@ -70,7 +70,7 @@
             <span class="pagination_link disable">След</span>
         <?php else:?>
         <a class="pagination_link"
-           href="<?= BASE_URL;?>/index.php?controller=admin&action=ingredients&page=<?= $current_page + 1;?>">След
+           href="<?= BASE_URL;?>/admin/ingredients/<?= $current_page + 1;?>">След
         </a>
         <?php endif;?>
     </div>

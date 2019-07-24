@@ -9,13 +9,13 @@
                 <div class="dishDescription">
                     <p class="recipe_category">
                         <a class="recipe_link"
-                           href="<?= BASE_URL;?>/index.php?controller=cookbook&action=viewCategory&category=<?= $item['category_id'];?>">
+                           href="<?= BASE_URL;?>/cookbook/viewCategory/<?= $item['category_id'];?>">
                             <?= $item['category_name']; ?>
                         </a>
                     </p>
                     <p class="recipe_dishName">
                         <a class="recipe_link"
-                           href="<?= BASE_URL;?>/index.php?controller=cookbook&action=viewDish&dish=<?= $item['id_dish'];?>">
+                           href="<?= BASE_URL;?>/cookbook/viewDish/<?= $item['id_dish'];?>">
                             <?= $item['name']; ?>
                         </a>
                     </p>
@@ -41,7 +41,7 @@
     <?php if ($displayButton):?>
         <div class="moreButton">
             <button class="inputBtn mFont" name="more" id="more"
-                    data-url="<?= BASE_URL;?>/index.php?controller=cookbook&action=getMoreDish"
+                    data-url="<?= BASE_URL;?>/cookbook/getMoreDish"
                     data-page="<?= $next_page;?>"
                     data-page-count="<?= $page_count;?>">Загрузить еще
             </button>

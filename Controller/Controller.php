@@ -5,18 +5,20 @@ namespace Controller;
 class Controller{
     private $controller = 'index';
     private $action = 'index';
-    private $model = NULL;
+    private $model_data = [];
 
-    public function __construct($controller = null, $action = null){
-        if ($controller) $this->controller = ucfirst($controller);
-        if ($action) $this->action = $action;
-        if (isset($_GET['model']) && $_GET['model'] !== '') $this->model = $_GET['model'];
+    public function __construct($params){
+        if (isset($params['controller'])) $this->controller = ucfirst($params['controller']);
+        if (isset($params['action'])) $this->action = $params['action'];
+        if (isset($params['id'])) $this->model_data['id'] = $params['id'];
+        if (isset($params['page'])) $this->model_data['page'] = $params['page'];
     }
 
     public function run(){
         $class = __NAMESPACE__ . '\\' . $this->controller . 'Controller';
         $this->action .= 'Action';
         $controller = new $class($this->action);
-        $controller->{$this->action}($this->model);
+        $controller->run($this->model_data);
+        $controller->{$this->action}();
     }
 }

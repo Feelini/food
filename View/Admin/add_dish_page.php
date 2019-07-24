@@ -1,5 +1,5 @@
 <div class="addDishContent">
-    <form enctype="multipart/form-data" class="addDishContent_form" action="<?= BASE_URL; ?>/index.php?controller=admin&action=addDish" method="post">
+    <form enctype="multipart/form-data" class="addDishContent_form" action="<?= BASE_URL; ?>/admin/addDish" method="post">
         <div class="addDishContent_name">
             <h3 class="addDishContent_title">Название</h3>
             <input class="input" type="text" name="new_dish[name]" autocomplete="off">

@@ -3,7 +3,7 @@
         <div class="dishRecipe_header">
             <p class="recipe_category">
                 <a class="recipe_link"
-                   href="<?= BASE_URL; ?>/index.php?controller=cookbook&action=viewCategory&category=<?= $dish[0]['category_id']; ?>">
+                   href="<?= BASE_URL; ?>/cookbook/viewCategory/<?= $dish[0]['category_id']; ?>">
                     <?= $dish[0]['category_name']; ?>
                 </a>
             </p>

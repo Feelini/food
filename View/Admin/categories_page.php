@@ -1,7 +1,7 @@
     <div class="mainContent">
         <div class="addItem">
             <div class="message"><? ?></div>
-            <form class="addClass" action="<?= BASE_URL; ?>/index.php?controller=admin&action=categories" method="post">
+            <form class="addClass" action="<?= BASE_URL; ?>/admin/categories" method="post">
                 <input class="input" type="text" name="name" autocomplete="off" placeholder="Название">
                 <input class="inputBtn mFont" type="submit" value="Добавить">
             </form>
@@ -24,7 +24,7 @@
                         <td><?= $categories[$i]['category_name']; ?></td>
                         <td>
                             <a class="adminLink"
-                               href="<?= BASE_URL; ?>/index.php?controller=admin&action=editCategory&id=<?= $categories[$i]['category_id']; ?>">
+                               href="<?= BASE_URL; ?>/admin/editCategory/<?= $categories[$i]['category_id']; ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                      viewBox="0 0 26 26" version="1.1"
                                      width="26px" height="26px">
@@ -35,7 +35,7 @@
                                 </svg>
                             </a>
                             <a class="adminLink deleteButton"
-                               href="<?= BASE_URL; ?>/index.php?controller=admin&action=deleteCategory&id=<?= $categories[$i]['category_id']; ?>">
+                               href="<?= BASE_URL; ?>/admin/deleteCategory/<?= $categories[$i]['category_id']; ?>">
                                 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                      viewBox="0 0 26 26" version="1.1"
                                      width="26px" height="26px">
@@ -56,12 +56,12 @@
                 <span class="pagination_link disable">Пред</span>
             <?php else:?>
                 <a class="pagination_link"
-                   href="<?= BASE_URL;?>/index.php?controller=admin&action=categories&page=<?= $current_page - 1;?>">Пред
+                   href="<?= BASE_URL;?>/admin/categories/<?= $current_page - 1;?>">Пред
                 </a>
             <?php endif;?>
             <?php for ($i = 0; $i < $pages_count; $i++):?>
                 <a class="pagination_link <?php if (($i + 1) == $current_page) echo 'active'?>"
-                   href="<?= BASE_URL;?>/index.php?controller=admin&action=categories&page=<?= ($i + 1);?>">
+                   href="<?= BASE_URL;?>/admin/categories/<?= ($i + 1);?>">
                     <?= ($i + 1);?>
                 </a>
             <?php endfor;?>
@@ -69,7 +69,7 @@
                 <span class="pagination_link disable">След</span>
             <?php else:?>
                 <a class="pagination_link"
-                   href="<?= BASE_URL;?>/index.php?controller=admin&action=categories&page=<?= $current_page + 1;?>">След
+                   href="<?= BASE_URL;?>/admin/categories/<?= $current_page + 1;?>">След
                 </a>
             <?php endif;?>
         </div>
