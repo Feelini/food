@@ -9,27 +9,31 @@ class MenuModel extends Model{
     }
 
     public function indexAction(){
-        $this->title = 'Создавай свое меню';
-        $this->data['ingredients'] = [];
-        $this->data['dish'] = $this->getDishByUser($_SESSION['user']['user_id']);
-        for ($i = 0; $i < count($this->data['dish']); $i++){
-            $this->data['ingredients'][] = $this->getIngredientsByDish($this->data['dish'][$i]['id_dish']);
-        }
-        $this->data['ingredients'] = $this->sortIngredients($this->data['ingredients']);
-        $this->data['user_ingredients'] = $this->getUserIngredients($_SESSION['user']['user_id']);
-        $this->data['result_ingredients'] = $this->data['ingredients'];
-        for ($i = 0; $i < count($this->data['result_ingredients']); $i++){
-            for ($j = 0; $j < count($this->data['user_ingredients']); $j++){
-                if ($this->data['result_ingredients'][$i]['id_product'] == $this->data['user_ingredients'][$j]['id_product']){
-                    if (((int)$this->data['user_ingredients'][$j]['number'] - (int)$this->data['result_ingredients'][$i]['number']) >= 0){
-                        array_splice($this->data['result_ingredients'], $i, 1);
-                        $i--;
-                        continue 2;
-                    } else{
-                        $this->data['result_ingredients'][$i]['number'] = (int)$this->data['result_ingredients'][$i]['number'] - (int)$this->data['user_ingredients'][$j]['number'];
+        if (isset($_SESSION['user']) && $_SESSION['user'] !== '') {
+            $this->title = 'Создавай свое меню';
+            $this->data['ingredients'] = [];
+            $this->data['dish'] = $this->getDishByUser($_SESSION['user']['user_id']);
+            for ($i = 0; $i < count($this->data['dish']); $i++) {
+                $this->data['ingredients'][] = $this->getIngredientsByDish($this->data['dish'][$i]['id_dish']);
+            }
+            $this->data['ingredients'] = $this->sortIngredients($this->data['ingredients']);
+            $this->data['user_ingredients'] = $this->getUserIngredients($_SESSION['user']['user_id']);
+            $this->data['result_ingredients'] = $this->data['ingredients'];
+            for ($i = 0; $i < count($this->data['result_ingredients']); $i++) {
+                for ($j = 0; $j < count($this->data['user_ingredients']); $j++) {
+                    if ($this->data['result_ingredients'][$i]['id_product'] == $this->data['user_ingredients'][$j]['id_product']) {
+                        if (((int)$this->data['user_ingredients'][$j]['number'] - (int)$this->data['result_ingredients'][$i]['number']) >= 0) {
+                            array_splice($this->data['result_ingredients'], $i, 1);
+                            $i--;
+                            continue 2;
+                        } else {
+                            $this->data['result_ingredients'][$i]['number'] = (int)$this->data['result_ingredients'][$i]['number'] - (int)$this->data['user_ingredients'][$j]['number'];
+                        }
                     }
                 }
             }
+        } else {
+            $this->data['login'] = true;
         }
     }
 

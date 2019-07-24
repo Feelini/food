@@ -25,6 +25,7 @@ class IndexController{
     }
 
     public function indexAction(){
+        var_dump($_SESSION);
         echo $this->view->render('index_page', $this->controller, $this->data);
     }
 }

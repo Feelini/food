@@ -23,7 +23,11 @@ class MenuController{
     }
 
     public function indexAction(){
-        echo $this->view->render('index_page', $this->controller, $this->data);
+        if (isset($this->data['login'])){
+            echo $this->view->render('login_page', $this->controller, $this->data);
+        } else {
+            echo $this->view->render('index_page', $this->controller, $this->data);
+        }
     }
 
     public function addDishAction(){
