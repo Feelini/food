@@ -1,0 +1,591 @@
+@font-face {
+    font-family: Roboto;
+    src: url(/fonts/roboto-regular.ttf);
+}
+
+body{
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    background: #f2f2f2;
+}
+
+header{
+    background-color: #343a40;
+    display: grid;
+    min-height: 60px;
+    grid-template-columns: auto auto;
+}
+
+.loginButtons,
+.logoutButton{
+    display: grid;
+    grid-template-columns: max-content max-content max-content;
+    align-items: center;
+    justify-content: start;
+    color: #fff;
+    text-align: center;
+    grid-gap: 10px;
+}
+
+.loginLink,
+.inputBtn{
+    text-decoration: none;
+    padding: 10px 15px;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: .25rem;
+}
+
+.loginLink:hover,
+.inputBtn:hover{
+    background-color: #0069d9;
+    border-color: #0062cc;
+}
+
+.menu{
+    display: grid;
+    grid-template-columns: repeat(4, 25%);
+    grid-gap: 10px;
+    justify-content: end;
+    text-align: center;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+
+}
+
+.menu_item{
+    padding: 15px 10px 15px 25px;
+    color: #999;
+}
+
+.menu_item:hover{
+    cursor: pointer;
+    color: #fff;
+}
+
+.menu_link{
+    text-decoration: none;
+    color: inherit;
+}
+
+.content{
+    display: grid;
+    margin: 0 auto;
+}
+
+.indexContent_item{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    width: 100%;
+}
+
+.indexContent_description{
+    grid-area: description;
+    display: grid;
+    justify-items: center;
+    align-content: center;
+    font-size: 2rem;
+}
+
+.indexContent_descriptionText{
+    text-align: center;
+}
+
+.indexContent_img{
+    grid-area: img;
+    width: 100%;
+}
+
+.indexContent_item:nth-child(odd){
+    grid-template-areas:
+        "description img";
+    grid-template-columns: 25% 75%;
+}
+
+.indexContent_item:nth-child(even){
+    grid-template-areas:
+        "img description";
+    grid-template-columns: 75% 25%;
+}
+
+.loginWrap{
+    display: grid;
+    width: 40%;
+    max-width: 600px;
+    grid-template-areas: "title" "form";
+    margin: 0 auto;
+    text-align: center;
+}
+
+.loginForm{
+    grid-area: form;
+    display: grid;
+    grid-gap: 10px;
+}
+
+.loginTitle{
+    grid-area: title;
+}
+
+.input{
+    box-sizing: content-box;
+    width: 300px;
+    font-size: 1.5em;
+    padding: 5px 10px;
+    border-radius: .25rem;
+    border: 1px solid #ced4da;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.small_input{
+    width: 150px;
+}
+
+.large_input{
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.input:focus{
+    color: #495057;
+    background-color: #fff;
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.inputBtn{
+    font-size: 1.5em;
+}
+
+.inputBtn:hover{
+    cursor: pointer;
+}
+
+.loginContent{
+    height: 60vh;
+    display: grid;
+    align-items: center;
+}
+
+.input.red{
+    border-color: rgb(255, 47, 39);
+    box-shadow: 0 0 0 0.2rem rgba(255, 0, 21, 0.47)
+}
+
+.indexContent_link{
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: .25rem;
+}
+
+.indexContent_link:hover{
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.adminContent{
+    display: grid;
+    grid-template-columns: 260px auto;
+    border-bottom: solid 1px #0d3349;
+}
+
+.adminSidebar{
+    border-right: solid 1px #0d3349;
+}
+
+.dishForm{
+    display: grid;
+    max-width: 1200px;
+    margin: 30px auto;
+}
+
+.userMenuIngredients{
+    max-width: 1200px;
+}
+
+.dishContent,
+.userMenuIngredients{
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.dishContent th,
+.userMenuIngredients_head th{
+    border-bottom: 2px solid #eceeef;
+    color: #55595c;
+    background-color: #c5c7c8;
+}
+
+.ingredient_row{
+    padding: 0 15px;
+}
+
+.userMenuIngredients_head th{
+    padding: 10px 0;
+}
+
+.dishContent td,
+.dishContent th{
+    border-top: 1px solid #eceeef;
+    padding: 10px 0;
+}
+
+.dishContent tr:hover{
+    background-color: #f0f0f0;
+}
+
+.adminSidebar_link,
+.adminSidebar_subLink{
+    text-decoration: none;
+    color: #000;
+}
+
+.adminSidebar_button,
+.adminSidebar_subButton{
+    display: block;
+    width: 220px;
+    padding: 10px;
+    border-radius: .25rem;
+    background-color: #e7e7e7;
+}
+
+.adminSidebar_subButton{
+    margin-top: 10px;
+    margin-left: 20px;
+    width: 200px;
+}
+
+.adminSidebar_subButton:before{
+    content: '-';
+}
+
+.adminSidebar_button:hover,
+.adminSidebar_subButton:hover{
+    cursor: pointer;
+    background-color: #dedede;
+}
+
+.button_wrap{
+    margin: 30px 10px;
+    display: grid;
+}
+
+.subButtons{
+    overflow: hidden;
+    transition-duration: 3s;
+    transition-timing-function: ease;
+}
+
+.open{
+    height: auto;
+}
+
+.close{
+    height: 0;
+}
+
+.addItem{
+    margin-top: 20px;
+    margin-left: 20px;
+    display: block;
+    width: max-content;
+}
+
+.mainContent_wrap{
+    display: grid;
+    justify-content: center;
+    margin-top: 50px;
+}
+
+.mFont{
+    padding: 5px 15px;
+}
+
+.addClass{
+    margin-left: 50px;
+}
+
+.success{
+    color: #155724;
+    background-color: #d4edda;
+    padding: .75rem 1.25rem;
+    margin-bottom: 1rem;
+    border: 1px solid #c3e6cb;
+    border-radius: .25rem;
+}
+
+.adminLink:hover .adminButton{
+    fill: rgb(0, 123, 255);
+}
+
+.addDishContent_form{
+    display: grid;
+    grid-gap: 15px;
+    margin: 10px 0 10px 50px;
+}
+
+.addDishContent_title{
+    margin: 0 0 10px 0;
+}
+
+.addButton{
+    color: #fff;
+    background-color: #919ba3;
+    border-color: #6c757d;
+    text-decoration: none;
+    font-size: 1.25em;
+    padding: 10px;
+    border-radius: .5rem;
+}
+
+.addButton:hover{
+    background-color: #5a6268;
+    border-color: #545b62;
+}
+
+.addDishContent_products{
+    display: grid;
+    grid-gap: 10px;
+}
+
+.removeButton{
+    display: none;
+}
+
+.removeButton:hover{
+    cursor: pointer;
+}
+
+.addDishContent_imgInput{
+    font-family: inherit;
+    font-size: 1.25rem;
+}
+
+.recipesContent{
+    display: grid;
+    width: 80%;
+    margin: 50px auto;
+    box-shadow: 0 0 1px rgba(0,0,0,.07);
+    background-color: #fff;
+    min-width: 700px;
+    max-width: 1200px;
+}
+
+.recipes{
+    display: grid;
+    grid-gap: 30px;
+    width: 700px;
+    margin: 0 auto;
+}
+
+.recipe{
+    display: grid;
+    grid-template-columns: 200px auto;
+    grid-gap: 15px;
+}
+
+.recipesContent_title{
+    text-align: center;
+}
+
+.recipe_category,
+.recipe_dishName{
+    font-size: 1.25rem;
+    margin: 0;
+}
+
+.recipe_dishName{
+    font-size: 1.75rem;
+    font-weight: bold;
+}
+
+.ingredient_row{
+    width: 400px;
+}
+
+.ingredient_row.short{
+    width: 380px;
+}
+
+.ingredient_row:after{
+    content:'.......................................................................................';
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.ingredients_enumeration{
+    list-style: none;
+}
+
+.ingredient_name{
+    float: left;
+    margin-right: 10px;
+}
+
+.ingredient_unit{
+    float: right;
+    margin-left: 10px;
+}
+
+.imgWrap{
+    position: relative;
+    width: 200px;
+    height: 200px;
+    overflow: hidden;
+}
+
+.dishImg{
+    position: absolute;
+    left: -100%;
+    right: -100%;
+    top: -100%;
+    bottom: -100%;
+    margin: auto;
+}
+
+.recipe_link{
+    text-decoration: none;
+    color: #000;
+}
+
+.recipe_link:hover{
+    text-decoration: underline;
+}
+
+.dishRecipe_header{
+    text-align: center;
+}
+
+.dishRecipe{
+    padding: 50px;
+}
+
+.dishRecipe_title{
+    margin-top: 0;
+}
+
+.dishRecipe_description{
+    display: grid;
+    grid-gap: 30px;
+    grid-template-columns: max-content max-content;
+}
+
+.dishRecipe_img{
+    max-width: 400px;
+}
+
+.dishRecipe_img__source{
+    width: 100%;
+}
+
+.pagination_link{
+    padding: .5rem .75rem;
+    margin-left: -1px;
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+    text-decoration: none;
+}
+
+.pagination_link:first-child{
+    border-top-left-radius: .25rem;
+    border-bottom-left-radius: .25rem;
+}
+
+.pagination_link:last-child{
+    border-top-right-radius: .25rem;
+    border-bottom-right-radius: .25rem;
+}
+
+.pagination{
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.pagination_link:hover{
+    color: #0056b3;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+.disable{
+    margin-right: -4px;
+    color: #6c757d;
+}
+
+.disable:hover{
+    cursor: default;
+    background-color: #fff;
+    color: #6c757d;
+}
+
+.active{
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.dishContent thead tr th:nth-child(1),
+.dishContent thead tr th:nth-child(2){
+    width: 5%;
+}
+
+.dishContent thead tr th:last-child{
+    width: 10%;
+}
+
+.moreButton{
+    text-align: center;
+    margin: 30px 0;
+}
+
+.addItem_center{
+    margin: 30px auto;
+    width: max-content;
+}
+
+.fridgeLogin{
+    display: grid;
+    justify-content: center;
+}
+
+.fridgeLogin_description{
+    font-size: 1.5rem;
+    text-align: center;
+    line-height: 2em;
+}
+
+.flag{
+    stroke: #af212b;
+    fill: #fff;
+}
+
+.flag.fill{
+    fill: #af212b;
+}
+
+.addToMenu{
+    margin-top: 15px;
+    border: solid 1px #d9d9d9;
+    border-radius: 3px;
+    padding: 5px;
+    width: max-content;
+    user-select: none;
+}
+
+.addToMenu:hover{
+    cursor: pointer;
+}
+
+.needIngredients{
+    margin: 0 auto;
+    width: max-content;
+}
