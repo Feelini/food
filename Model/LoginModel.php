@@ -15,7 +15,7 @@ class LoginModel extends Model{
         parent::__construct($action);
     }
 
-    public function loginAction(){
+    public function indexAction(){
         $this->title = 'Вход';
     }
 

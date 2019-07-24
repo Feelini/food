@@ -20,7 +20,7 @@ class LoginController{
         $this->data = $this->model->getData();
     }
 
-    public function loginAction(){
+    public function indexAction(){
         echo $this->view->render('login_page', $this->controller, $this->data);
     }
 

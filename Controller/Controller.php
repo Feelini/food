@@ -7,9 +7,9 @@ class Controller{
     private $action = 'index';
     private $model = NULL;
 
-    public function __construct(){
-        if (isset($_GET['controller'])) $this->controller = ucfirst($_GET['controller']);
-        if (isset($_GET['action'])) $this->action = $_GET['action'];
+    public function __construct($controller = null, $action = null){
+        if ($controller) $this->controller = ucfirst($controller);
+        if ($action) $this->action = $action;
         if (isset($_GET['model']) && $_GET['model'] !== '') $this->model = $_GET['model'];
     }
 
