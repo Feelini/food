@@ -31,6 +31,6 @@ class CookbookController{
     }
 
     public function getMoreDishAction(){
-        echo json_encode($this->data['dish']);
+        echo json_encode([$this->data['dish'], 'baseURL' => BASE_URL]);
     }
 }

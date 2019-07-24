@@ -4,7 +4,7 @@ namespace Model;
 
 
 class CookbookModel extends Model{
-    private $items_per_page = 1;
+    private $items_per_page = 10;
 
     public function __construct($action){
         parent::__construct($action);

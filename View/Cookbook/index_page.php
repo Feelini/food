@@ -19,7 +19,7 @@
                             <?= $item['name']; ?>
                         </a>
                     </p>
-                    <div class="addToMenu bookmark" data-dishId="<?= $item['id_dish'];?>">
+                    <div class="addToMenu bookmark" data-dishId="<?= $item['id_dish'];?>" data-baseurl="<?= BASE_URL;?>">
                         <svg viewBox="0 0 9 14" width="9" height="14">
                             <path d="M8.5 12.566l-3.723-2.482-.277-.185-.277.185L.5 12.566V1h8v11.566z" class="flag"></path>
                         </svg>
