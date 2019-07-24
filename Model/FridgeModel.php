@@ -10,7 +10,7 @@ class FridgeModel extends Model{
         parent::__construct($action);
     }
 
-    public function indexAction(){
+    public function indexAction($data){
         if (isset($_SESSION['user']) && $_SESSION['user'] !== ''){
             $user_id = $_SESSION['user']['user_id'];
             if (isset($_POST['new_ingredient']) && $_POST['new_ingredient'] !== ''){
@@ -26,7 +26,7 @@ class FridgeModel extends Model{
                 }
             }
             $this->title = 'Держи холодильник под рукой';
-            $page = $_GET['page'] ?? 1;
+            $page = $data['page'] ?? 1;
             $this->data['products'] = $this->getAllProducts();
             $this->data['units'] = $this->getAllUnits();
             $this->data['ingredients'] = $this->getUserIngredients($user_id, $page);
@@ -41,17 +41,17 @@ class FridgeModel extends Model{
 
     }
 
-    public function deleteIngredientAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== ''){
-            $id = (int)$_GET['id'];
+    public function deleteIngredientAction($data){
+        if (isset($data['id']) && $data['id'] !== ''){
+            $id = (int)$data['id'];
             $user_id = (int)$_SESSION['user']['user_id'];
             $this->data['success'] = $this->deleteIngredient($id, $user_id);
         }
     }
 
-    public function editIngredientAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== ''){
-            $id = (int)$_GET['id'];
+    public function editIngredientAction($data){
+        if (isset($data['id']) && $data['id'] !== ''){
+            $id = (int)$data['id'];
             $user_id = (int)$_SESSION['user']['user_id'];
             $this->data['ingredient'] = $this->getIngredientById($id, $user_id);
             $this->data['ingredient']['id_product'] = $id;

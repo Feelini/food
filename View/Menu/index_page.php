@@ -19,7 +19,7 @@
                     <td><?= $dish[$i]['category_name']; ?></td>
                     <td>
                         <a class="adminLink deleteButton"
-                           href="<?= BASE_URL; ?>/index.php?controller=menu&action=deleteDish&id=<?= $dish[$i]['id_dish']; ?>">
+                           href="<?= BASE_URL; ?>/menu/deleteDish/<?= $dish[$i]['id_dish']; ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                  viewBox="0 0 26 26" version="1.1" width="26px" height="26px">
                                 <g id="surface1">

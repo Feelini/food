@@ -1,7 +1,7 @@
 <div class="loginContent">
     <div class="loginWrap">
 <!--        <h2 class="loginTitle">Зарегистрироваться</h2>-->
-        <form action="<?= BASE_URL;?>/index.php?controller=login&action=register" class="loginForm" method="post">
+        <form action="<?= BASE_URL;?>/login/register" class="loginForm" method="post">
             <input type="text"
                    class="input large_input<?php echo (isset($errors['login']) && $errors['login'] !== '') ? ' red' : ''?>"
                    name="login"

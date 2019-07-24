@@ -1,6 +1,6 @@
 <div class="mainContent">
     <div class="addItem_center">
-        <form class="addClass" action="<?= BASE_URL; ?>/index.php?controller=fridge" method="post">
+        <form class="addClass" action="<?= BASE_URL; ?>/fridge" method="post">
             <select class="input" name="new_ingredient[product]">
                 <?php foreach ($products as $product): ?>
                     <option value="<?= $product['id_product']; ?>">
@@ -40,7 +40,7 @@
                     <td><?= $ingredients[$i]['number'] . ' ' .$ingredients[$i]['unit_name']; ?></td>
                     <td>
                         <a class="adminLink"
-                           href="<?= BASE_URL; ?>/index.php?controller=fridge&action=editIngredient&id=<?= $ingredients[$i]['id_product']; ?>">
+                           href="<?= BASE_URL; ?>/fridge/editIngredient/<?= $ingredients[$i]['id_product']; ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                  viewBox="0 0 26 26" version="1.1"
                                  width="26px" height="26px">
@@ -51,7 +51,7 @@
                             </svg>
                         </a>
                         <a class="adminLink deleteButton"
-                           href="<?= BASE_URL; ?>/index.php?controller=fridge&action=deleteIngredient&id=<?= $ingredients[$i]['id_product']; ?>">
+                           href="<?= BASE_URL; ?>/fridge/deleteIngredient/<?= $ingredients[$i]['id_product']; ?>">
                             <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                  viewBox="0 0 26 26" version="1.1"
                                  width="26px" height="26px">
@@ -72,12 +72,12 @@
             <span class="pagination_link disable">Пред</span>
         <?php else:?>
             <a class="pagination_link"
-               href="<?= BASE_URL;?>/index.php?controller=fridge&page=<?= $current_page - 1;?>">Пред
+               href="<?= BASE_URL;?>/fridge/<?= $current_page - 1;?>">Пред
             </a>
         <?php endif;?>
         <?php for ($i = 0; $i < $pages_count; $i++):?>
             <a class="pagination_link <?php if (($i + 1) == $current_page) echo 'active'?>"
-               href="<?= BASE_URL;?>/index.php?controller=fridge&page=<?= ($i + 1);?>">
+               href="<?= BASE_URL;?>/fridge/<?= ($i + 1);?>">
                 <?= ($i + 1);?>
             </a>
         <?php endfor;?>
@@ -85,7 +85,7 @@
             <span class="pagination_link disable">След</span>
         <?php else:?>
             <a class="pagination_link"
-               href="<?= BASE_URL;?>/index.php?controller=fridge&page=<?= $current_page + 1;?>">След
+               href="<?= BASE_URL;?>/fridge/<?= $current_page + 1;?>">След
             </a>
         <?php endif;?>
     </div>

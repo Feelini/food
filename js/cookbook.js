@@ -36,7 +36,7 @@ class Cookbook {
                             recipeLink.classList.add('recipe_link');
                             let linkText = document.createTextNode(item.category_name);
                             recipeLink.appendChild(linkText);
-                            recipeLink.setAttribute('href', 'http://food/index.php?controller=cookbook&action=viewCategory&category='+item.category_id);
+                            recipeLink.setAttribute('href', 'http://food/cookbook/viewCategory/'+item.category_id);
                             let recipeCategory = document.createElement('p');
                             recipeCategory.classList.add('recipe_category');
                             recipeCategory.appendChild(recipeLink);
@@ -46,7 +46,7 @@ class Cookbook {
                             recipeLink.classList.add('recipe_link');
                             linkText = document.createTextNode(item.name);
                             recipeLink.appendChild(linkText);
-                            recipeLink.setAttribute('href', 'http://food/index.php?controller=cookbook&action=viewDish&dish='+item.id_dish);
+                            recipeLink.setAttribute('href', 'http://food/cookbook/viewDish/'+item.id_dish);
                             let recipeDishName = document.createElement('p');
                             recipeDishName.classList.add('recipe_dishName');
                             recipeDishName.appendChild(recipeLink);
@@ -119,7 +119,7 @@ class Cookbook {
                             dishImgResize();
                             setBookmark();
 
-                            history.pushState(null, null, `Http://food/index.php?controller=cookbook&page=${button.dataset.page}`);
+                            history.pushState(null, null, `Http://food/cookbook/${button.dataset.page}`);
 
                             if (button.dataset.page === button.dataset.pageCount){
                                 button.parentNode.removeChild(button);
@@ -142,7 +142,7 @@ class Cookbook {
             let xhr = new XMLHttpRequest();
             let form = new FormData();
             form.append('dish_id', event.currentTarget.dataset.dishid);
-            xhr.open('POST', 'http://food/index.php?controller=menu&action=addDish');
+            xhr.open('POST', 'http://food/menu/addDish');
             xhr.send(form);
             xhr.onreadystatechange = function() {
                 if (xhr.readyState != 4) return;

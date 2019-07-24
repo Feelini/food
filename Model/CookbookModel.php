@@ -10,8 +10,8 @@ class CookbookModel extends Model{
         parent::__construct($action);
     }
 
-    public function indexAction(){
-        $page = $_GET['page'] ?? 1;
+    public function indexAction($data){
+        $page = $data['page'] ?? 1;
         $this->data['dish'] = $this->get_dish(['page' => $page]);
         foreach ($this->data['dish'] as $key => $dish){
             $this->data['dish'][$key]['ingredients'] = $this->get_ingredients($dish['id_dish']);
@@ -23,9 +23,9 @@ class CookbookModel extends Model{
         $this->title = 'Кулинарная книга';
     }
 
-    public function viewDishAction(){
-        if (isset($_GET['dish']) && $_GET['dish'] !== ''){
-            $id = $_GET['dish'];
+    public function viewDishAction($data){
+        if (isset($data['dish']) && $data['dish'] !== ''){
+            $id = $data['dish'];
             $this->data['dish'] = $this->get_dish(['id' => $id]);
             $this->data['ingredients'] = $this->get_ingredients($id);
             $this->title = $this->data['dish'][0]['name'];

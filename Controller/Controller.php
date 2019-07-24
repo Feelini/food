@@ -12,6 +12,7 @@ class Controller{
         if (isset($params['action'])) $this->action = $params['action'];
         if (isset($params['id'])) $this->model_data['id'] = $params['id'];
         if (isset($params['page'])) $this->model_data['page'] = $params['page'];
+        if (isset($params['dish'])) $this->model_data['dish'] = $params['dish'];
     }
 
     public function run(){

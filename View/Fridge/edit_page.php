@@ -1,5 +1,5 @@
 <div class="addItem_center">
-    <form class="addClass" action="<?= BASE_URL; ?>/index.php?controller=fridge&action=editIngredient" method="post">
+    <form class="addClass" action="<?= BASE_URL; ?>/fridge/editIngredient" method="post">
         <select class="input" name="new_ingredient[product]">
             <option value="<?= $ingredient['id_product']; ?>">
                 <?= $ingredient['product_name']; ?>

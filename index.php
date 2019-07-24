@@ -49,6 +49,20 @@ if ($request !== ''){
                                 break;
                         }
                         break;
+                    case 'fridge':
+                        switch ($params['action']){
+                            case 'editIngredient':
+                            case 'deleteIngredient':
+                                $params['id'] = $request[2] ?? '';
+                                break;
+                        }
+                        break;
+                    case 'menu':
+                        switch ($params['action']){
+                            case 'deleteDish':
+                                $params['id'] = $request[2] ?? '';
+                        }
+                        break;
                 }
             }
         }

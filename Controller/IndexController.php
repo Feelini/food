@@ -15,8 +15,11 @@ class IndexController{
 
     public function __construct($action){
         $this->action = $action;
+    }
+
+    public function run($model_data){
         $this->model = new IndexModel($this->action);
-        $this->model->{$this->action}();
+        $this->model->{$this->action}($model_data);
         $this->data = $this->model->getData();
         $this->view = new View();
     }

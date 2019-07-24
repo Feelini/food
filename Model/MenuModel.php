@@ -31,17 +31,6 @@ class MenuModel extends Model{
                 }
             }
         }
-//        foreach ($this->data['result_ingredients'] as $key => $ingredient){
-//            foreach ($this->data['user_ingredients'] as $user_ingredient) {
-//                if ($ingredient['id_product'] == $user_ingredient['id_product']){
-//                    if (((int)$user_ingredient['number'] - (int)$ingredient['number']) >= 0){
-//                        array_splice($this->data['result_ingredients'], $key, 1);
-//                    } else {
-//                        $this->data['result_ingredients'][$key]['number'] = (int)$ingredient['number'] - (int)$user_ingredient['number'];
-//                    }
-//                }
-//            }
-//        }
     }
 
     public function addDishAction(){
@@ -49,10 +38,9 @@ class MenuModel extends Model{
         $this->data['success'] = $this->addDish($_SESSION['user']['user_id'], $dish_id);
     }
 
-    public function deleteDishAction(){
-        if (isset($_GET['id']) && $_GET['id'] !== ''){
-            $dish_id = $_GET['id'];
-            $this->data['success'] = $this->deleteDish($dish_id, (int)$_SESSION['user']['user_id']);
+    public function deleteDishAction($data){
+        if (isset($data['id']) && $data['id'] !== ''){
+            $this->data['success'] = $this->deleteDish($data['id'], (int)$_SESSION['user']['user_id']);
         }
     }
 

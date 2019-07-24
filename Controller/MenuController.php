@@ -13,8 +13,11 @@ class MenuController{
 
     public function __construct($action){
         $this->action = $action;
+    }
+
+    public function run($model_data){
         $this->model = new MenuModel($this->action);
-        $this->model->{$this->action}();
+        $this->model->{$this->action}($model_data);
         $this->data = $this->model->getData();
         $this->view = new View();
     }
@@ -29,7 +32,7 @@ class MenuController{
 
     public function deleteDishAction(){
         if (isset($this->data['success'])){
-            $this->view->redirect(['path' => '/index.php?controller=menu']);
+            $this->view->redirect(['path' => '/menu']);
         }
     }
 }
