@@ -2,7 +2,9 @@
 
 namespace Model;
 
-use Controller\ValidateController;
+use helpers\Database;
+use helpers\MyException;
+use helpers\Validate;
 
 class LoginModel extends Model{
     private $min_pass_len = 5;
@@ -24,7 +26,7 @@ class LoginModel extends Model{
 
     public function enterAction(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            $validate = new ValidateController();
+            $validate = new Validate();
             $login = $validate->clean_field($_POST['login']);
             $pass = $validate->clean_field($_POST['pass']);
 
@@ -61,7 +63,7 @@ class LoginModel extends Model{
 
     public function registerAction(){
         if ($_SERVER['REQUEST_METHOD'] == 'POST'){
-            $validate = new ValidateController();
+            $validate = new Validate();
             $login = $validate->clean_field($_POST['login']);
             $pass = $validate->clean_field($_POST['pass']);
             $pass2 = $validate->clean_field($_POST['pass2']);
@@ -104,21 +106,15 @@ class LoginModel extends Model{
     public function logoutAction(){}
 
     private function get_user($login){
-        $result_array = [];
-        $query = "SELECT `user_id`, `login`, `pass`, `is_admin` FROM users WHERE login = '$login'";
-        if (!($result = $this->mysqli->query($query)))
-            die('Ошибка запроса пользователя: ' . $this->mysqli->error);
-        while ($row = $result->fetch_assoc()) {
-            $result_array[] = $row;
-        }
-        $result->free();
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['user_id', 'login', 'pass', 'is_admin'], 'users')
+            ->where(['login' => $login]);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function add_user($login, $pass){
-        $query = "INSERT INTO `users` (`login`, `pass`) VALUES ('$login', '$pass')";
-        if (!($result = $this->mysqli->query($query)))
-            die('Ошибка запроса пользователя: ' . $this->mysqli->error);
-        return true;
+        $db = new Database($this->mysqli);
+        $db->insert('users', ['login' => $login, 'pass' => $pass]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 }

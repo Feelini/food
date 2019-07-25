@@ -33,7 +33,7 @@ class FridgeModel extends Model{
             $this->data['units'] = $this->getAllUnits();
             $this->data['ingredients'] = $this->getUserIngredients($user_id, $page);
             $user_ingredients_count = $this->getUserIngredientsCount($user_id);
-            $user_ingredients_count = $user_ingredients_count['ingredients_count'];
+            $user_ingredients_count = $user_ingredients_count[0]['ingredients_count'];
             $this->data['ingredients_per_page'] = $this->ingredient_per_page;
             $this->data['pages_count'] = ceil((int)$user_ingredients_count / $this->ingredient_per_page);
             $this->data['current_page'] = $page;

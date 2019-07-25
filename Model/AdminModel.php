@@ -3,6 +3,9 @@
 namespace Model;
 
 
+use helpers\Database;
+use helpers\MyException;
+
 class AdminModel extends Model{
     private $items_per_page = 10;
 
@@ -14,7 +17,7 @@ class AdminModel extends Model{
         $this->title = 'Редактор рецептов';
         $page = $data['page'] ?? 1;
         $dish_count = $this->get_dish_count();
-        $this->data['pages_count'] = ceil(((int)$dish_count[0]/$this->items_per_page));
+        $this->data['pages_count'] = ceil(((int)$dish_count[0]['count']/$this->items_per_page));
         $this->data['current_page'] = $page;
         $this->data['dish_per_page'] = $this->items_per_page;
         $this->data['dish'] = $this->get_dish_content(['page' => $page]);
@@ -77,7 +80,7 @@ class AdminModel extends Model{
     public function ingredientsAction($data){
         $page = $data['page'] ?? 1;
         $ingredient_count = $this->get_products_count();
-        $this->data['pages_count'] = ceil(((int)$ingredient_count[0]/$this->items_per_page));
+        $this->data['pages_count'] = ceil(((int)$ingredient_count[0]['count']/$this->items_per_page));
         $this->data['current_page'] = $page;
         $this->data['ingredients_per_page'] = $this->items_per_page;
         $this->title = 'Редактор ингредиентов';
@@ -109,7 +112,7 @@ class AdminModel extends Model{
         $this->title = 'Редактор категорий';
         $page = $data['page'] ?? 1;
         $categories_count = $this->get_categories_count();
-        $this->data['pages_count'] = ceil(((int)$categories_count[0]/$this->items_per_page));
+        $this->data['pages_count'] = ceil(((int)$categories_count[0]['count']/$this->items_per_page));
         $this->data['current_page'] = $page;
         $this->data['categories_per_page'] = $this->items_per_page;
         if (isset($_POST['name']) && $_POST['name'] !== '') {
@@ -140,7 +143,7 @@ class AdminModel extends Model{
         $this->title = 'Редактор мер';
         $page = $data['page'] ?? 1;
         $categories_count = $this->get_units_count();
-        $this->data['pages_count'] = ceil(((int)$categories_count[0]/$this->items_per_page));
+        $this->data['pages_count'] = ceil(((int)$categories_count[0]['count']/$this->items_per_page));
         $this->data['current_page'] = $page;
         $this->data['units_per_page'] = $this->items_per_page;
         if (isset($_POST['name']) && $_POST['name'] !== '') {
@@ -168,240 +171,156 @@ class AdminModel extends Model{
     }
 
     private function get_dish_content($array = NULL){
-        $result_array = [];
-        $sql = "SELECT `id_dish`, `name`, `img_path`, `recipe`, dish_categories.category_id, `category_name` FROM `dish`
-                LEFT JOIN `dish_categories` ON dish_categories.category_id = dish.category_id";
-        if (isset($array['id'])) $sql .= " WHERE id_dish = '{$array['id']}'";
-        $sql .= " ORDER BY `name`";
-        if (isset($array['page'])){
-            $offset = ($array['page'] - 1) * $this->items_per_page;
-            $sql .= " LIMIT $offset, $this->items_per_page";
-        }
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)) {
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['id_dish', 'name', 'img_path', 'recipe', 'dish_categories.category_id', 'category_name'], 'dish')
+            ->left_join('dish_categories', ['dish_categories.category_id', 'dish.category_id']);
+        if (isset($array['id'])) $db->where(['id_dish' => $array['id']]);
+        $db->order_by('name');
+        if (isset($array['page'])) $db->limit(($array['page'] - 1) * $this->items_per_page, $this->items_per_page);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_dish_count(){
-        $result_array = '';
-        $sql = "SELECT COUNT(*) FROM dish";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_array($result)) {
-            $result_array = $row;
-        }
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->count('dish', 'id_dish', 'count');
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_products_content($array = NULL){
-        $result_array = [];
-        $sql = "SELECT `id_product`, `product_name` FROM `products`";
-        if (isset($array['id'])) {
-            $sql .= " WHERE id_product = '{$array['id']}'";
-        }
-        $sql .= " ORDER BY `product_name`";
-        if (isset($array['page'])){
-            $offset = ($array['page'] - 1) * $this->items_per_page;
-            $sql .= " LIMIT $offset, $this->items_per_page";
-        }
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)) {
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['id_product', 'product_name'], 'products');
+        if (isset($array['id'])) $db->where(['id_product' => $array['id']]);
+        $db->order_by('product_name');
+        if (isset($array['page'])) $db->limit(($array['page'] - 1) * $this->items_per_page, $this->items_per_page);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_products_count(){
-        $result_array = '';
-        $sql = "SELECT COUNT(*) FROM products";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_array($result)) {
-            $result_array = $row;
-        }
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->count('products', 'id_product', 'count');
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_categories_content($array = NULL){
-        $result_array = [];
-        $sql = "SELECT `category_id`, `category_name` FROM `dish_categories`";
-        if (isset($array['id'])) {
-            $sql .= " WHERE category_id = '{$array['id']}'";
-        }
-        $sql .= " ORDER BY `category_name`";
-        if (isset($array['page'])){
-            $offset = ($array['page'] - 1) * $this->items_per_page;
-            $sql .= " LIMIT $offset, $this->items_per_page";
-        }
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)) {
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['category_id', 'category_name'], 'dish_categories');
+        if (isset($array['id'])) $db->where(['category_id' => $array['id']]);
+        $db->order_by('category_name');
+        if (isset($array['page'])) $db->limit(($array['page'] - 1) * $this->items_per_page, $this->items_per_page);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_categories_count(){
-        $result_array = '';
-        $sql = "SELECT COUNT(*) FROM dish_categories";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_array($result)) {
-            $result_array = $row;
-        }
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->count('dish_categories', 'category_id', 'count');
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_units_content($array = NULL){
-        $result_array = [];
-        $sql = "SELECT `unit_id`, `unit_name` FROM `units`";
-        if (isset($array['id'])) {
-            $sql .= " WHERE unit_id = '{$array['id']}'";
-        }
-        $sql .= " ORDER BY `unit_name`";
-        if (isset($array['page'])){
-            $offset = ($array['page'] - 1) * $this->items_per_page;
-            $sql .= " LIMIT $offset, $this->items_per_page";
-        }
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)) {
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['unit_id', 'unit_name'], 'units');
+        if (isset($array['id'])) $db->where(['unit_id' => $array['id']]);
+        $db->order_by('unit_name');
+        if (isset($array['page'])) $db->limit(($array['page'] - 1) * $this->items_per_page, $this->items_per_page);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_units_count(){
-        $result_array = '';
-        $sql = "SELECT COUNT(*) FROM units";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_array($result)) {
-            $result_array = $row;
-        }
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->count('units', 'unit_id', 'count');
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_ingredients_content($id = NULL){
-        $result_array = [];
-        $sql = "SELECT `id_product`, `number`, `unit_id` FROM `ingredients`";
-        if ($id) {
-            $sql .= " WHERE id_dish = '$id'";
-        }
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса контента: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)) {
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['id_product', 'number', 'unit_id'], 'ingredients');
+        if ($id) $db->where(['id_dish' => $id]);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function add_products($name){
-        $sql = "INSERT INTO products(`product_name`) VALUES ('$name')";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка добавления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->insert('products', ['product_name' => $name]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function deleteIngredient($id){
-        $sql = "DELETE FROM products WHERE `id_product` = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка удаления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->delete('products', ['id_product' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function updateIngredient($name, $id){
-        $sql = "UPDATE products SET `product_name` = '$name' WHERE id_product = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка обновления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->update('products', ['product_name' => $name])->where(['id_product' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function add_category($name){
-        $sql = "INSERT INTO dish_categories(`category_name`) VALUES ('$name')";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка добавления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->insert('dish_categories', ['category_name' => $name]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function deleteCategory($id){
-        $sql = "DELETE FROM dish_categories WHERE `category_id` = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка удаления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->delete('dish_categories', ['category_id' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function updateCategory($name, $id){
-        $sql = "UPDATE dish_categories SET `category_name` = '$name' WHERE category_id = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка обновления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->update('dish_categories', ['category_name' => $name])->where(['category_id' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function add_unit($name){
-        $sql = "INSERT INTO units(`unit_name`) VALUES ('$name')";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка добавления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->insert('units', ['unit_name' => $name]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function deleteUnit($id){
-        $sql = "DELETE FROM units WHERE `unit_id` = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка удаления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->delete('units', ['unit_id' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function updateUnit($name, $id){
-        $sql = "UPDATE units SET `unit_name` = '$name' WHERE unit_id = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка обновления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->update('units', ['unit_name' => $name])->where(['unit_id' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function add_dish($name, $category_id, $img_path, $recipe){
-        $sql = "INSERT INTO dish(name, category_id, img_path, recipe) VALUES ('$name', '$category_id', '$img_path', '$recipe')";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка обновления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->insert('dish', ['name' => $name, 'category_id' => $category_id, 'img_path' => $img_path, 'recipe' => $recipe]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function add_ingredients($id_product, $id_dish, $number, $unit_id){
-        $sql = "INSERT INTO ingredients(id_product, id_dish, number, unit_id) VALUES ('$id_product', '$id_dish', '$number', '$unit_id')";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка обновления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->insert('ingredients', ['id_product' => $id_product, 'id_dish' => $id_dish, 'number' => $number, 'unit_id' => $unit_id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function deleteDish($id){
-        $sql = "DELETE FROM dish WHERE `id_dish` = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка удаления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->delete('dish', ['id_dish' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function updateDish($name, $category_id, $recipe, $id_dish, $img_path = NULL){
-        $sql = "UPDATE dish SET `name` = '$name', `category_id` = '$category_id', `recipe` = '$recipe'";
-        if ($img_path) $sql .= ", `img_path` = '$img_path'";
-        $sql .= " WHERE id_dish = '$id_dish'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка обновления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->update('dish', ['name' => $name, 'category_id' => $category_id, 'recipe' => $recipe]);
+        if ($img_path) $db->update('dish', ['img_path' => $img_path]);
+        $db->where(['id_dish' => $id_dish]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function deleteIngredients($id){
-        $sql = "DELETE FROM ingredients WHERE `id_dish` = '$id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка удаления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->delete('ingredients', ['id_dish' => $id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 }

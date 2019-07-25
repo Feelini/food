@@ -3,6 +3,7 @@
 namespace helpers;
 use Exception;
 use Throwable;
+use View\View;
 
 class MyException extends Exception{
     public function __construct($message = "", $code = 0, Throwable $previous = null){
@@ -15,7 +16,14 @@ class MyException extends Exception{
                 throw new MyException('Ошибка: ' . $mysqli->error);
         }
         catch (Exception $ex){
-            return $ex->getMessage();
+            $view = new View();
+            $db = new Database($mysqli);
+            $db->select(['name', 'link'], 'menu');
+            echo $view->render('error_view', 'Exception', [
+                'message' => $ex->getMessage(),
+                'menu' => MyException::db_query_result($mysqli, $db->get_query())
+            ]);
+            die;
         }
         return false;
     }
@@ -31,7 +39,14 @@ class MyException extends Exception{
             $result->free_result();
         }
         catch (Exception $ex){
-            return $ex->getMessage();
+            $view = new View();
+            $db = new Database($mysqli);
+            $db->select(['name', 'link'], 'menu');
+            echo $view->render('error_view', 'Exception', [
+                'message' => $ex->getMessage(),
+                'menu' => MyException::db_query_result($mysqli, $db->get_query())
+            ]);
+            die;
         }
         return $result_array;
     }

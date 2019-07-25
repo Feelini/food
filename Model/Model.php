@@ -2,6 +2,10 @@
 
 namespace Model;
 
+use helpers\Database;
+use helpers\MyException;
+use mysqli;
+
 class Model{
     protected $action;
     protected $data;
@@ -15,27 +19,26 @@ class Model{
     }
 
     private function get_menu(){
-        $result_array = [];
-        $sql = "SELECT `name`, `link` FROM menu";
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса меню: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['name', 'link'], 'menu');
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function connect() {
-        if (!($mysqli = mysqli_connect(HOST, USER, PASSWORD, DATABASE)))
-            die('Не удалось подключиться к базе данных: ' . mysqli_connect_error());
-        if (!mysqli_set_charset($mysqli, 'utf8'))
-            die('Ошибка при установке кодировки: ' . mysqli_error($mysqli));
+        try{
+            if (!($mysqli = new mysqli(HOST, USER, PASSWORD, DATABASE)))
+                throw new MyException('Не удалось подключиться к базе данных: ' . $mysqli->connect_error);
+            if (!$mysqli->set_charset('utf8'))
+                throw new MyException('Ошибка при установке кодировки: ' . $mysqli->error);
+        }
+        catch (MyException $ex){
+            return $ex->getMessage();
+        }
         return $mysqli;
     }
 
     public function getData() {
-        mysqli_close($this->mysqli);
+        $this->mysqli->close();
         $this->data['title'] = $this->title;
         return $this->data;
     }

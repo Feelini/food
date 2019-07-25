@@ -68,7 +68,7 @@ class Database{
     public function count($table, $column = null, $as = null){
         $this->query = "SELECT COUNT(";
         $this->query .= ($column) ? $column . ")" : '*)';
-        $this->query .= ")" . ($as) ? " AS $as" : '';
+        $this->query .= ($as) ? " AS $as" : '';
         $this->query .= " FROM $table";
         return $this;
     }

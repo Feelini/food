@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use helpers\Database;
+use helpers\MyException;
 use Model\DBModel;
 
 
@@ -69,65 +71,41 @@ class MenuModel extends Model{
     }
 
     private function getDishByUser($user_id){
-        $result_array = [];
-        $sql = "SELECT name, category_name, user_cookbook.id_dish FROM user_cookbook
-                LEFT JOIN dish ON dish.id_dish = user_cookbook.id_dish
-                LEFT JOIN dish_categories ON dish_categories.category_id = dish.category_id
-                WHERE user_cookbook.user_id = '$user_id'";
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса содержимого: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['name', 'category_name', 'user_cookbook.id_dish'], 'user_cookbook')
+            ->left_join('dish', ['dish.id_dish', 'user_cookbook.id_dish'])
+            ->left_join('dish_categories', ['dish_categories.category_id', 'dish.category_id'])
+            ->where(['user_cookbook.user_id' => $user_id]);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function getIngredientsByDish($dish_id){
-        $result_array = [];
-        $sql = "SELECT product_name, number, unit_name, ingredients.id_product
-                    FROM ingredients LEFT JOIN products
-                    ON ingredients.id_product = products.id_product
-                    LEFT JOIN units 
-                    ON ingredients.unit_id = units.unit_id
-                    WHERE id_dish = $dish_id";
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса содержимого: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['product_name', 'number', 'unit_name', 'ingredients.id_product'], 'ingredients')
+            ->left_join('products', ['ingredients.id_product', 'products.id_product'])
+            ->left_join('units', ['ingredients.unit_id', 'units.unit_id'])
+            ->where(['id_dish' => $dish_id]);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function addDish($user_id, $dish_id){
-        $sql = "INSERT INTO `user_cookbook` (`user_id`, `id_dish`) VALUES ('$user_id', '$dish_id')";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса пользователя: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->insert('user_cookbook', ['user_id' => $user_id, 'id_dish' => $dish_id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function deleteDish($id, $user_id){
-        $sql = "DELETE FROM user_cookbook WHERE `id_dish` = '$id' AND `user_id` = '$user_id'";
-        if (!($result = mysqli_query($this->mysqli, $sql)))
-            die('Ошибка удаления: ' . mysqli_error($this->mysqli));
-        return true;
+        $db = new Database($this->mysqli);
+        $db->delete('user_cookbook', ['id_dish' => $id, 'user_id' => $user_id]);
+        return MyException::db_query($this->mysqli, $db->get_query());
     }
 
     private function getUserIngredients($user_id){
-        $result_array = [];
-        $sql = "SELECT product_name, number, unit_name, user_fridge.id_product
-                    FROM user_fridge LEFT JOIN products
-                    ON products.id_product = user_fridge.id_product
-                    LEFT JOIN units 
-                    ON user_fridge.unit_id = units.unit_id
-                    WHERE user_id = '$user_id'";
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса содержимого: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['product_name', 'number', 'unit_name', 'user_fridge.id_product'], 'user_fridge')
+            ->left_join('products', ['products.id_product', 'user_fridge.id_product'])
+            ->left_join('units', ['user_fridge.unit_id', 'units.unit_id'])
+            ->where(['user_id' => $user_id]);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 }

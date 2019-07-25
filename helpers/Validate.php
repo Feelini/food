@@ -1,9 +1,9 @@
 <?php
 
-namespace Controller;
+namespace helpers;
 
 
-class ValidateController{
+class Validate{
     public function __construct(){
     }
 
