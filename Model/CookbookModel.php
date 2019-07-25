@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use helpers\Database;
+use helpers\MyException;
 
 class CookbookModel extends Model{
     private $items_per_page = 10;
@@ -43,67 +45,34 @@ class CookbookModel extends Model{
     }
 
     private function get_dish_on_page($page = NULL){
-        $result_array = [];
-        $sql = "SELECT id_dish, `name`, img_path, category_name, recipe, dish.category_id
-                FROM dish LEFT JOIN dish_categories
-                ON dish.category_id = dish_categories.category_id";
-        if ($page){
-            $offset = ($page - 1) * $this->items_per_page;
-            $sql .= " LIMIT $offset, $this->items_per_page";
-        }
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса содержимого главной: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['id_dish', 'name', 'img_path', 'category_name', 'recipe', 'dish.category_id'], 'dish')
+            ->left_join('dish_categories', ['dish.category_id', 'dish_categories.category_id']);
+        if ($page) $db->limit(($page - 1) * $this->items_per_page, $this->items_per_page);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_dish($array = NULL){
-        $result_array = [];
-        $sql = "SELECT id_dish, `name`, img_path, category_name, recipe, dish.category_id
-                FROM dish LEFT JOIN dish_categories
-                ON dish.category_id = dish_categories.category_id";
-        if (isset($array['id'])) $sql .= " WHERE id_dish = {$array['id']}";
-        if (isset($array['page'])){
-            $limit = ($array['page']) * $this->items_per_page;
-            $sql .= " LIMIT $limit";
-        }
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса содержимого главной: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['id_dish', 'name', 'img_path', 'category_name', 'recipe', 'dish.category_id'], 'dish')
+            ->left_join('dish_categories', ['dish.category_id', 'dish_categories.category_id']);
+        if (isset($array['id'])) $db->where(['id_dish' => $array['id']]);
+        if (isset($array['page'])) $db->limit(($array['page']) * $this->items_per_page);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_ingredients($dish_id){
-        $result_array = [];
-        $sql = "SELECT product_name, number, unit_name
-                    FROM ingredients LEFT JOIN products
-                    ON ingredients.id_product = products.id_product
-                    LEFT JOIN units 
-                    ON ingredients.unit_id = units.unit_id
-                    WHERE id_dish = $dish_id";
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса содержимого главной: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        mysqli_free_result($result);
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->select(['product_name', 'number', 'unit_name'], 'ingredients')
+            ->left_join('products', ['ingredients.id_product', 'products.id_product'])
+            ->left_join('units', ['ingredients.unit_id', 'units.unit_id'])
+            ->where(['id_dish' => $dish_id]);
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 
     private function get_dish_count(){
-        $result_array = [];
-        $sql = "SELECT COUNT(name) AS count FROM dish";
-        if (!($result=mysqli_query($this->mysqli, $sql)))
-            die('Ошибка запроса количества блюд: ' . mysqli_error($this->mysqli));
-        while ($row = mysqli_fetch_assoc($result)){
-            $result_array[] = $row;
-        }
-        return $result_array;
+        $db = new Database($this->mysqli);
+        $db->count('dish', 'name', 'count');
+        return MyException::db_query_result($this->mysqli, $db->get_query());
     }
 }

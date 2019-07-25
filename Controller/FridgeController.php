@@ -25,7 +25,7 @@ class FridgeController{
     public function indexAction(){
         if (isset($this->data['login'])){
             echo $this->view->render('login_page', $this->controller, $this->data);
-        } else if (isset($this->data['success'])){
+        } else if (isset($this->data['success']) && $this->data['success'] == false){
             $this->view->redirect(['path' => '/fridge']);
         } else {
             echo $this->view->render('index_page', $this->controller, $this->data);

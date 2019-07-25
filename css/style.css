@@ -589,3 +589,8 @@ header{
     margin: 0 auto;
     width: max-content;
 }
+
+.alert{
+    width: max-content;
+    margin: 0 auto;
+}

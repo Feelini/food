@@ -20,6 +20,11 @@
             <input class="inputBtn mFont" type="submit" value="Добавить">
         </form>
     </div>
+    <?php if (isset($success)):?>
+    <div class="alert">
+        <h2><?= $success;?></h2>
+    </div>
+    <?php endif;?>
     <form action="" class="dishForm">
         <table class="dishContent">
             <thead>

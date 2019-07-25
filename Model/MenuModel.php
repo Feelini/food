@@ -2,6 +2,8 @@
 
 namespace Model;
 
+use Model\DBModel;
+
 
 class MenuModel extends Model{
     public function __construct($action){

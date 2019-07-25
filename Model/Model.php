@@ -2,7 +2,6 @@
 
 namespace Model;
 
-
 class Model{
     protected $action;
     protected $data;
