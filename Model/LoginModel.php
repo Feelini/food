@@ -2,6 +2,7 @@
 
 namespace Model;
 
+use helpers\Captcha;
 use helpers\Database;
 use helpers\MyException;
 use helpers\Validate;
@@ -22,6 +23,7 @@ class LoginModel extends Model{
 
     public function registrationAction(){
         $this->title = 'Регистрация';
+        $this->data['captcha_question'] = Captcha::getCaptchaQuestion();
     }
 
     public function enterAction(){
@@ -67,6 +69,7 @@ class LoginModel extends Model{
             $login = $validate->clean_field($_POST['login']);
             $pass = $validate->clean_field($_POST['pass']);
             $pass2 = $validate->clean_field($_POST['pass2']);
+            $captcha = $validate->clean_field($_POST['captcha']);
 
             if ($error = $validate->is_empty($login)){
                 $this->data['errors']['login'] = $error;
@@ -92,8 +95,15 @@ class LoginModel extends Model{
                 $this->data['errors']['pass'] = $error;
             }
 
+            if ($error = $validate->is_empty($captcha)){
+                $this->data['errors']['captcha'] = $error;
+            } elseif (!Captcha::isValidCaptcha($captcha)){
+                $this->data['errors']['captcha'] = 'Неверный ответ';
+                $this->data['captcha_question'] = Captcha::generateCaptchaQuestion();
+            }
+
             if(!isset($this->data['errors'])){
-                $this->data['success'] = ($this->add_user($login, password_hash($pass, PASSWORD_DEFAULT)));
+                $this->data['success'] = !($this->add_user($login, password_hash($pass, PASSWORD_DEFAULT)));
                 if ($this->data['success']){
                     $_SESSION['user']['login'] = $login;
                     $_SESSION['user']['user_id'] = $this->mysqli->insert_id;

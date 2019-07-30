@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `dish` (
   PRIMARY KEY (`id_dish`),
   KEY `FK_dish_dish_categories` (`category_id`),
   CONSTRAINT `FK_dish_dish_categories` FOREIGN KEY (`category_id`) REFERENCES `dish_categories` (`category_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Основная информация о блюдах';
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Основная информация о блюдах';
 
 -- Дамп данных таблицы food.dish: ~4 rows (приблизительно)
 /*!40000 ALTER TABLE `dish` DISABLE KEYS */;
@@ -111,10 +111,10 @@ CREATE TABLE IF NOT EXISTS `menu` (
 -- Дамп данных таблицы food.menu: ~4 rows (приблизительно)
 /*!40000 ALTER TABLE `menu` DISABLE KEYS */;
 INSERT IGNORE INTO `menu` (`id_item`, `name`, `link`) VALUES
-	(1, 'Главная', '/index.php'),
-	(5, 'Кулинарная книга', '/index.php?controller=cookbook'),
-	(6, 'Мой холодильник', '/index.php?controller=fridge'),
-	(7, 'Мое меню', '/index.php?controller=menu');
+	(1, 'Главная', '/'),
+	(5, 'Кулинарная книга', '/cookbook'),
+	(6, 'Мой холодильник', '/fridge'),
+	(7, 'Мое меню', '/menu');
 /*!40000 ALTER TABLE `menu` ENABLE KEYS */;
 
 -- Дамп структуры для таблица food.products
@@ -179,12 +179,13 @@ CREATE TABLE IF NOT EXISTS `users` (
   `pass` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL DEFAULT '',
   `is_admin` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Список пользователей';
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='Список пользователей';
 
--- Дамп данных таблицы food.users: ~3 rows (приблизительно)
+-- Дамп данных таблицы food.users: ~1 rows (приблизительно)
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT IGNORE INTO `users` (`user_id`, `login`, `pass`, `is_admin`) VALUES
-	(1, 'admin', '21232f297a57a5a743894a0e4a801fc3', 1);
+	(1, 'admin', '$2y$10$L7kVcZQvdLWXZbGQAo3aR.OsvRr7hIdQR5G6afwIoqktVg9ubSahm', 1),
+	(10, 'qwe', '$2y$10$Gi7SV0rW/MFNnMDsSzwq9e1JcP1Jknqt2BXkXDOO8GeHNs.yMqXIK', 0);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 
 -- Дамп структуры для таблица food.user_cookbook
@@ -198,7 +199,7 @@ CREATE TABLE IF NOT EXISTS `user_cookbook` (
   CONSTRAINT `FK_user_cookbook_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы food.user_cookbook: ~3 rows (приблизительно)
+-- Дамп данных таблицы food.user_cookbook: ~2 rows (приблизительно)
 /*!40000 ALTER TABLE `user_cookbook` DISABLE KEYS */;
 INSERT IGNORE INTO `user_cookbook` (`user_id`, `id_dish`) VALUES
 	(1, 2),
@@ -219,12 +220,13 @@ CREATE TABLE IF NOT EXISTS `user_fridge` (
   CONSTRAINT `FK_user_fridge_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
--- Дамп данных таблицы food.user_fridge: ~3 rows (приблизительно)
+-- Дамп данных таблицы food.user_fridge: ~2 rows (приблизительно)
 /*!40000 ALTER TABLE `user_fridge` DISABLE KEYS */;
 INSERT IGNORE INTO `user_fridge` (`user_id`, `id_product`, `number`, `unit_id`) VALUES
 	(1, 1, 200, 1),
-	(1, 38, 3000, 1),
-	(1, 46, 200, 1);
+	(1, 34, 1, 2),
+	(1, 38, 300, 1),
+	(1, 46, 100, 1);
 /*!40000 ALTER TABLE `user_fridge` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;

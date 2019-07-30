@@ -23,7 +23,7 @@ class Database{
         $this->query = substr($this->query, 0, -2);
         $this->query .= ") VALUES (";
         foreach ($values as $key => $value){
-            $this->query .= $this->mysqli->real_escape_string($value) . ', ';
+            $this->query .= "'" . $this->mysqli->real_escape_string($value) . "', ";
         }
         $this->query = substr($this->query, 0, -2);
         $this->query .= ")";
@@ -43,9 +43,9 @@ class Database{
     public function where($condition){
         $this->query .= " WHERE ";
         foreach ($condition as $key => $item) {
-            $this->query .= "$key = " . $this->mysqli->real_escape_string($item) . " AND ";
+            $this->query .= "$key = '" . $this->mysqli->real_escape_string($item) . "' AND ";
         }
-        $this->query = substr($this->query, 0, -4);
+        $this->query = substr($this->query, 0, -5);
         return $this;
     }
 

@@ -15,7 +15,7 @@ class MyException extends Exception{
             if (!($result = $mysqli->query($query)))
                 throw new MyException('Ошибка: ' . $mysqli->error);
         }
-        catch (Exception $ex){
+        catch (MyException $ex){
             $view = new View();
             $db = new Database($mysqli);
             $db->select(['name', 'link'], 'menu');
@@ -38,7 +38,7 @@ class MyException extends Exception{
             }
             $result->free_result();
         }
-        catch (Exception $ex){
+        catch (MyException $ex){
             $view = new View();
             $db = new Database($mysqli);
             $db->select(['name', 'link'], 'menu');
