@@ -1,13 +1,20 @@
 <div class="mainContent">
     <div class="addItem_center">
         <form class="addClass" action="<?= BASE_URL; ?>/fridge" method="post">
-            <select class="input" name="new_ingredient[product]">
+            <input id="get_id" class="input" name="new_ingredient[product_name]" list="products">
+            <datalist id="products">
                 <?php foreach ($products as $product): ?>
-                    <option value="<?= $product['id_product']; ?>">
-                        <?= $product['product_name']; ?>
-                    </option>
+                    <option value="<?= $product['product_name']; ?>" data-value="<?= $product['id_product']; ?>">
                 <?php endforeach; ?>
-            </select>
+            </datalist>
+            <input type="hidden" id="set_id" name="new_ingredient[product]" value="">
+<!--            <select class="input" name="new_ingredient[product]">-->
+<!--                --><?php //foreach ($products as $product): ?>
+<!--                    <option value="--><?//= $product['id_product']; ?><!--">-->
+<!--                        --><?//= $product['product_name']; ?>
+<!--                    </option>-->
+<!--                --><?php //endforeach; ?>
+<!--            </select>-->
             <input class="input small_input<?php echo (isset($error['number']) && $error['number'] !== '') ? ' red' : ''?>"
                    type="text" name="new_ingredient[unit_number]" autocomplete="off">
             <select class="input small_input" name="new_ingredient[unit]">
